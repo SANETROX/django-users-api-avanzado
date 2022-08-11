@@ -35,7 +35,7 @@ class MoldelTest(TestCase):
             email=None
         )
     
-    def test_new_superuser(self):
+    def test_create_new_superuser(self):
         """"Test para un nuevo superuser"""
         email = 'testsuperuser@gmail.com'
         password = 'testpassword123'
