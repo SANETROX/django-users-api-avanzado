@@ -1,0 +1,24 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "database": "postgres",
+            "username": "postgres",
+            "password": "CAMIlodev1994",
+            "name": "wsl postgres"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "wsl api_users_avanzado",
+            "database": "api_user_avanzado",
+            "username": "postgres",
+            "password": "CAMIlodev1994"
+        }
+    ]
+}

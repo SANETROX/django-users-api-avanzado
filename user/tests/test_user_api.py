@@ -49,10 +49,9 @@ class PublicUserApiTests(TestCase):
         """"Test para validar una password corta"""
         payload = {
             "email": "camilo@gmail.com",
-            "password": "pa112",
+            "password": "pa1",
             "name": "sanetrox"
         }
-        create_user(**payload)
         res = self.client.post(CREATE_USER_URL, payload)
         user_exists = get_user_model().objects.filter(
             email=payload["email"]
@@ -63,7 +62,7 @@ class PublicUserApiTests(TestCase):
         """Probar que el token es creado por el user"""
         payload = {
             "email": "camilo@gmail.com",
-            "password": "pa112",
+            "password": "pass1234@",
             "name": "sanetrox"
         }
         create_user(**payload)
@@ -77,7 +76,7 @@ class PublicUserApiTests(TestCase):
         create_user(email='sanetrox@gmail.com', password='password1233')
         payload = {'email':"sanetrox@gmail.com", 'password':'1234'}
         res = self.client.post(TOKEN_URL, payload)
-        self.assertIn('token', res.data)
+        self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code,status.HTTP_400_BAD_REQUEST)
     
     def test_create_token_no_user(self):
@@ -89,7 +88,7 @@ class PublicUserApiTests(TestCase):
             "name": "sanetrox1"
         }
         res = self.client.post(TOKEN_URL, payload)
-        self.assertIn('token', res.data)
+        self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code,status.HTTP_400_BAD_REQUEST)
 
     def test_create_token_missing_field(self):
@@ -99,5 +98,5 @@ class PublicUserApiTests(TestCase):
             "password": ""
         }
         res = self.client.post(TOKEN_URL, payload)
-        self.assertIn('token', res.data)
+        self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code,status.HTTP_400_BAD_REQUEST)

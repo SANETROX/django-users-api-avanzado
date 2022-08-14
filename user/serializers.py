@@ -1,17 +1,42 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """"Srializer for User objects"""
+    """"Serializer for User objects"""
 
     class Meta:
         model = get_user_model()
         fields = ('email', 'password','name')
-        extra_kwargs = {'password':{'write_only':True, 'min_length':5}}
+        extra_kwargs = {'password':{'write_only':True, 'min_length':8}}
     
     def create(self,validated_data):
-        """"Crear nuevo user con clave encriptada"""
+        """"Crear nuevo user con clave encriptada y retornarla"""
         return get_user_model().objects.create_user(
             **validated_data
         )
+
+class AuthTokenSerializer(serializers.Serializer):
+    """Serializador para el objeto de autenticacion del user"""
+    email = serializers.CharField()
+    password = serializers.CharField(
+        style={'input_type':'password'},
+        trim_whitespace=False
+    )
+
+    def validate(self, attrs):
+        """validar y autenticar user"""
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        user = authenticate(
+            request = self.context.get('request'),
+            username = email,
+            password = password
+        )
+        if not user:
+            message = _("Unable to authencticate with provider credentials")
+            raise serializers.ValidationError(message, code='authorization')
+        attrs['user'] = user
+        return  attrs
